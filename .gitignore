@@ -1,3 +1,4 @@
 .game_content
 .tools/
 build/
+port/compile_commands.json

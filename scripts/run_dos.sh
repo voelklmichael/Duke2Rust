@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # Run the freshly built DUKE3D.EXE in DOSBox, using the Atomic Edition game data.
 # Usage: scripts/run_dos.sh [extra DUKE3D.EXE args...]
+#        scripts/run_dos.sh --prepare-only   (set up build/run without launching)
 set -euo pipefail
+
+PREPARE_ONLY=0
+if [ "${1:-}" = "--prepare-only" ]; then PREPARE_ONLY=1; shift; fi
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 WATCOM="${WATCOM:-$ROOT/.tools/watcom}"
@@ -41,4 +45,5 @@ DUKE3D.EXE $*
 exit
 CONF
 
+[ "$PREPARE_ONLY" = 1 ] && exit 0
 exec dosbox -conf "$RUN/dosbox.conf"
