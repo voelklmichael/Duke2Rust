@@ -7665,7 +7665,7 @@ int main(int argc,char **argv)  // PORT: was void main
 
 char opendemoread(char which_demo) // 0 = mine
 {
-    char *d = "demo_.dmo";
+    char d[] = "demo_.dmo";  // PORT: was char *d (the code writes into it; literals are read-only on Linux)
     char ver;
     short i;
 
@@ -7723,7 +7723,7 @@ char opendemoread(char which_demo) // 0 = mine
 
 void opendemowrite(void)
 {
-    char *d = "demo1.dmo";
+    char d[] = "demo1.dmo";  // PORT: was char *d (the code writes into it; literals are read-only on Linux)
     long dummylong = 0;
     char ver;
     short i;

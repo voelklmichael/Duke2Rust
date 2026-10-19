@@ -10,18 +10,18 @@ TARGET  := $(BUILD)/duke3d
 ARCH     := -m32
 WARN     := -w
 CFLAGS   ?= -O1 -g
-CFLAGS   += $(ARCH) $(WARN) -fno-strict-aliasing -fwrapv -funsigned-char \
+CFLAGS   += -MMD -MP $(ARCH) $(WARN) -fno-strict-aliasing -fwrapv -funsigned-char \
             -Igame -Iengine -Icompat -Imact -Iaudio -Iplatform
 LDFLAGS  += $(ARCH)
-LDLIBS   += -lm
+LDLIBS   += -lm -lpthread
 
 GAME_SRC   := game.c actors.c gamedef.c global.c menues.c player.c premap.c \
               sector.c sounds.c rts.c config.c animlib.c
-ENGINE_SRC := engine.c cache1d.c mmulti.c
+ENGINE_SRC := engine.c cache1d.c mmulti.c a.c
 COMPAT_SRC := pragmas.c dos.c
-MACT_SRC   :=
-AUDIO_SRC  :=
-PLAT_SRC   :=
+MACT_SRC   := util_lib.c file_lib.c keyboard.c mouse.c control.c scriplib.c task_man.c
+AUDIO_SRC  := audio_stub.c
+PLAT_SRC   ?= platform_null.c
 
 SRCS := $(addprefix game/,$(GAME_SRC)) $(addprefix engine/,$(ENGINE_SRC)) \
         $(addprefix compat/,$(COMPAT_SRC)) $(addprefix mact/,$(MACT_SRC)) \
@@ -38,6 +38,8 @@ $(BUILD)/obj/%.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 objs: $(OBJS)
+
+-include $(OBJS:.o=.d)
 
 clean:
 	rm -rf $(BUILD)

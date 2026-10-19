@@ -360,9 +360,7 @@ drawrooms(long daposx, long daposy, long daposz,
 	umost[0] = shortptr1[0]-windowy1;
 	dmost[0] = shortptr2[0]-windowy1;
 
-	if (smostwallcnt < 0)
-		if (getkensmessagecrc(FP_OFF(kensmessage)) != 0x56c764d4)
-			{ setvmode(0x3); printf("Nice try.\n"); exit(0); }
+	// PORT: removed the kensmessage checksum test (see setgamemode).
 
 	numhits = xdimen; numscans = 0; numbunches = 0;
 	maskwallcnt = 0; smostwallcnt = 0; smostcnt = 0; spritesortcnt = 0;
@@ -1944,16 +1942,16 @@ setgamemode(char davidoption, long daxdim, long daydim)
 {
 	long i, j, k, ostereomode;
 
+	// PORT: Duke's chained/Tseng/S3 modes (0,3,4,5) and 320x200 mode 2 all use the
+	// emulated linear VESA path (one buffered page, presented by the platform layer).
+	davidoption = 1;
+
 	if ((qsetmode == 200) && (vidoption == davidoption) && (xdim == daxdim) && (ydim == daydim))
 		return(0);
 	vidoption = davidoption; xdim = daxdim; ydim = daydim;
 
 	strcpy(kensmessage,"!!!! BUILD engine&tools programmed by Ken Silverman of E.G. RI.  (c) Copyright 1995 Ken Silverman.  Summary:  BUILD = Ken. !!!!");
 	// PORT: removed the checksum test of kensmessage (always passed for this constant string).
-
-	// PORT: Duke's chained/Tseng/S3 modes (0,3,4,5) and 320x200 mode 2 all use the
-	// emulated linear VESA path (one buffered page, presented by the platform layer).
-	davidoption = 1;
 
 	ostereomode = stereomode; if (stereomode) setstereo(0L);
 

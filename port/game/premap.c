@@ -1212,7 +1212,7 @@ void genspriteremaps(void)
 {
     long j,fp;
     signed char look_pos;
-    char *lookfn = "lookup.dat";
+    char lookfn[] = "lookup.dat";  // PORT: was char *lookfn (the code writes into it; literals are read-only on Linux)
     char numl;
 
     fp = kopen4load(lookfn,0);

@@ -47,7 +47,7 @@ char *ultoa(unsigned long value, char *buf, int radix);
 #endif
 
 // Watcom's C library keeps the command line in these globals (set in main()).
-extern int _argc;
+extern long _argc;   // long: matches MACT's "int32 _argc"
 extern char **_argv;
 
 #ifndef O_BINARY

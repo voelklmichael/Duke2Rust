@@ -518,7 +518,7 @@ void readsavenames(void)
 {
     long dummy;
     short i;
-    char *fn = {"game_.sav"};
+    char fn[] = "game_.sav";  // PORT: was char *fn (the code writes into it; literals are read-only on Linux)
     FILE *fil;
 
     for (i=0;i<10;i++)

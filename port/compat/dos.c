@@ -18,7 +18,7 @@
 #undef fopen
 #undef access
 
-int _argc;
+long _argc;
 char **_argv;
 
 char *strupr(char *s) { char *p; for (p = s; *p; p++) *p = toupper((unsigned char)*p); return s; }

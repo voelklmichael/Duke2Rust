@@ -43,8 +43,7 @@ short myconnectindex, numplayers;
 short connecthead, connectpoint2[MAXPLAYERS];
 char syncstate = 0;
 
-extern int _argc;
-extern char **_argv;
+// PORT: _argc/_argv are declared in compat.h
 
 #define MAXPACKETSIZE 2048
 typedef struct
