@@ -91,11 +91,16 @@ The script builds the executable first if it is missing, then sets up `build/run
   starts DOSBox with it. DOSBox 0.74 doesn't support `-set` on the command
   line, which is why the script writes a config file.
 
-Result: the game starts and runs in DOSBox.
+Result: the game starts and runs in DOSBox, with sound effects and music.
+
+Sound: the borrowed `DUKE3D.CFG` selects Sound Blaster for both effects
+(`FXDevice = 0`) and music (`MusicDevice = 0`). Its settings (address 0x220,
+IRQ 7, DMA 1/5, type 6 = SB16) match DOSBox's defaults. Music is FM synthesis
+on the emulated OPL chip. The "MIDI: Opened device: none" message at startup
+only concerns the separate MPU-401 MIDI port, which this config doesn't use.
 
 ## Open points
 
-- DOSBox reports no MIDI device, so music may be silent.
 - The borrowed `DUKE3D.CFG` is for v1.3D. If settings misbehave, generate a
   fresh one with the game's `SETUP.EXE`.
 - `MACT386.LIB` has no source. A Rust port has to reimplement it from its
