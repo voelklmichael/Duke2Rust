@@ -31,7 +31,7 @@ Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 #include <dos.h>
 #include <bios.h>
 #include <io.h>
-#include <fcntl.H>
+#include <fcntl.h>  // PORT: was <fcntl.H>
 #include <time.h>
 #include <ctype.h>
 #include "pragmas.h"
@@ -86,6 +86,7 @@ Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 #include "sndcards.h"
 
 #include "names.h"
+struct player_struct;  // PORT: funct.h uses it before the definition below
 #include "funct.h"
 
 
@@ -96,12 +97,8 @@ Prepared for public release: 03/21/2003 - Charlie Wiederhold, 3D Realms
 
 #define NUM_SOUNDS 450
 
-#pragma aux sgn =\
-        "add ebx, ebx",\
-        "sbb eax, eax",\
-        "cmp eax, ebx",\
-        "adc eax, 0",\
-        parm [ebx]\
+// PORT: was a Watcom inline asm pragma; same as ksgn() (-1, 0 or 1).
+#define sgn(a) ksgn(a)
 
 #define    ALT_IS_PRESSED ( KB_KeyPressed( sc_RightAlt ) || KB_KeyPressed( sc_LeftAlt ) )
 #define    SHIFTS_IS_PRESSED ( KB_KeyPressed( sc_RightShift ) || KB_KeyPressed( sc_LeftShift ) )

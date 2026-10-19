@@ -62,18 +62,10 @@ typedef struct
 } gcomtype;
 static gcomtype *gcom;
 
-static union REGS regs;
-
-#pragma aux longcall =\
-	"call eax",\
-	parm [eax]\
-
+// PORT: there is no DOS network driver (COMMIT) to call. Only reached with
+// numplayers >= 2, which needs the "net" command line option.
 callcommit()
 {
-	if (gcom->intnum&0xff00)
-		longcall(gcom->longcalladdress);
-	else
-		int386(gcom->intnum,&regs,&regs);
 }
 
 initmultiplayers(char damultioption, char dacomrateoption, char dapriority)

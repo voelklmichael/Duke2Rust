@@ -203,8 +203,8 @@ reportandexit(char *errormessage)
 
 #include <fcntl.h>
 #include <io.h>
-#include <sys\types.h>
-#include <sys\stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 
 #define MAXGROUPFILES 4     //Warning: Fix groupfil if this is changed
 #define MAXOPENFILES 64     //Warning: Fix filehan if this is changed

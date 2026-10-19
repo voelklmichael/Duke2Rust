@@ -12,8 +12,8 @@
 #include <dos.h>
 #include <fcntl.h>
 #include <io.h>
-#include <sys\types.h>
-#include <sys\stat.h>
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <conio.h>
 #include <i86.h>
 #include "build.h"
@@ -25,8 +25,7 @@ volatile char oa1, o3c2, ortca, ortcb, overtbits, laststereoint;
 
 #include "ves2.h"
 
-#pragma intrinsic(min);
-#pragma intrinsic(max);
+// PORT: min/max were Watcom intrinsics; now macros in compat.h.
 
 #define MAXCLIPNUM 512
 #define MAXPERMS 512
@@ -38,25 +37,16 @@ volatile char oa1, o3c2, ortca, ortcb, overtbits, laststereoint;
 
 	//MUST CALL MALLOC THIS WAY TO FORCE CALLS TO KMALLOC!
 void *kmalloc(size_t size) { return(malloc(size)); }
-void *kkmalloc(size_t size);
-#pragma aux kkmalloc =\
-	"call kmalloc",\
-	parm [eax]\
+#define kkmalloc kmalloc  // PORT: was a Watcom "call kmalloc" pragma
 
 	//MUST CALL FREE THIS WAY TO FORCE CALLS TO KFREE!
 void kfree(void *buffer) { free(buffer); }
-void kkfree(void *buffer);
-#pragma aux kkfree =\
-	"call kfree",\
-	parm [eax]\
+#define kkfree kfree  // PORT: was a Watcom "call kfree" pragma
 
 #ifdef SUPERBUILD
 	//MUST CALL LOADVOXEL THIS WAY BECAUSE WATCOM STINKS!
 void loadvoxel(long voxindex) { }
-void kloadvoxel(long voxindex);
-#pragma aux kloadvoxel =\
-	"call loadvoxel",\
-	parm [eax]\
+#define kloadvoxel loadvoxel  // PORT: was a Watcom "call loadvoxel" pragma
 
 	//These variables need to be copied into BUILD
 #define MAXXSIZ 128
@@ -116,16 +106,7 @@ char britable[16][64];
 char textfont[1024], smalltextfont[1024];
 
 static char kensmessage[128];
-#pragma aux getkensmessagecrc =\
-	"xor eax, eax",\
-	"mov ecx, 32",\
-	"beg: mov edx, dword ptr [ebx+ecx*4-4]",\
-	"ror edx, cl",\
-	"adc eax, edx",\
-	"bswap eax",\
-	"loop short beg",\
-	parm [ebx]\
-	modify exact [eax ebx ecx edx]\
+// PORT: removed getkensmessagecrc (asm checksum of the constant kensmessage, see setgamemode).
 
 static long xb1[MAXWALLSB], yb1[MAXWALLSB], xb2[MAXWALLSB], yb2[MAXWALLSB];
 static long rx1[MAXWALLSB], ry1[MAXWALLSB], rx2[MAXWALLSB], ry2[MAXWALLSB];
@@ -249,171 +230,57 @@ static long mirrorsx1, mirrorsy1, mirrorsx2, mirrorsy2;
 
 long totalclocklock;
 
-extern long mmxoverlay();
-#pragma aux mmxoverlay modify [eax ebx ecx edx];
-extern long sethlinesizes(long,long,long);
-#pragma aux sethlinesizes parm [eax][ebx][ecx];
-extern long setpalookupaddress(char *);
-#pragma aux setpalookupaddress parm [eax];
-extern long setuphlineasm4(long,long);
-#pragma aux setuphlineasm4 parm [eax][ebx];
-extern long hlineasm4(long,long,long,long,long,long);
-#pragma aux hlineasm4 parm [eax][ebx][ecx][edx][esi][edi];
-extern long setuprhlineasm4(long,long,long,long,long,long);
-#pragma aux setuprhlineasm4 parm [eax][ebx][ecx][edx][esi][edi];
-extern long rhlineasm4(long,long,long,long,long,long);
-#pragma aux rhlineasm4 parm [eax][ebx][ecx][edx][esi][edi];
-extern long setuprmhlineasm4(long,long,long,long,long,long);
-#pragma aux setuprmhlineasm4 parm [eax][ebx][ecx][edx][esi][edi];
-extern long rmhlineasm4(long,long,long,long,long,long);
-#pragma aux rmhlineasm4 parm [eax][ebx][ecx][edx][esi][edi];
-extern long setupqrhlineasm4(long,long,long,long,long,long);
-#pragma aux setupqrhlineasm4 parm [eax][ebx][ecx][edx][esi][edi];
-extern long qrhlineasm4(long,long,long,long,long,long);
-#pragma aux qrhlineasm4 parm [eax][ebx][ecx][edx][esi][edi];
-extern long setvlinebpl(long);
-#pragma aux setvlinebpl parm [eax];
-extern long fixtransluscence(long);
-#pragma aux fixtransluscence parm [eax];
-extern long prevlineasm1(long,long,long,long,long,long);
-#pragma aux prevlineasm1 parm [eax][ebx][ecx][edx][esi][edi];
-extern long vlineasm1(long,long,long,long,long,long);
-#pragma aux vlineasm1 parm [eax][ebx][ecx][edx][esi][edi];
-extern long setuptvlineasm(long);
-#pragma aux setuptvlineasm parm [eax];
-extern long tvlineasm1(long,long,long,long,long,long);
-#pragma aux tvlineasm1 parm [eax][ebx][ecx][edx][esi][edi];
-extern long setuptvlineasm2(long,long,long);
-#pragma aux setuptvlineasm2 parm [eax][ebx][ecx];
-extern long tvlineasm2(long,long,long,long,long,long);
-#pragma aux tvlineasm2 parm [eax][ebx][ecx][edx][esi][edi];
-extern long mvlineasm1(long,long,long,long,long,long);
-#pragma aux mvlineasm1 parm [eax][ebx][ecx][edx][esi][edi];
-extern long setupvlineasm(long);
-#pragma aux setupvlineasm parm [eax];
-extern long vlineasm4(long,long);
-#pragma aux vlineasm4 parm [ecx][edi] modify [eax ebx ecx edx esi edi];
-extern long setupmvlineasm(long);
-#pragma aux setupmvlineasm parm [eax];
-extern long mvlineasm4(long,long);
-#pragma aux mvlineasm4 parm [ecx][edi] modify [eax ebx ecx edx esi edi];
-extern void setupspritevline(long,long,long,long,long,long);
-#pragma aux setupspritevline parm [eax][ebx][ecx][edx][esi][edi];
-extern void spritevline(long,long,long,long,long,long);
-#pragma aux spritevline parm [eax][ebx][ecx][edx][esi][edi];
-extern void msetupspritevline(long,long,long,long,long,long);
-#pragma aux msetupspritevline parm [eax][ebx][ecx][edx][esi][edi];
-extern void mspritevline(long,long,long,long,long,long);
-#pragma aux mspritevline parm [eax][ebx][ecx][edx][esi][edi];
-extern void tsetupspritevline(long,long,long,long,long,long);
-#pragma aux tsetupspritevline parm [eax][ebx][ecx][edx][esi][edi];
-extern void tspritevline(long,long,long,long,long,long);
-#pragma aux tspritevline parm [eax][ebx][ecx][edx][esi][edi];
-extern long mhline(long,long,long,long,long,long);
-#pragma aux mhline parm [eax][ebx][ecx][edx][esi][edi];
-extern long mhlineskipmodify(long,long,long,long,long,long);
-#pragma aux mhlineskipmodify parm [eax][ebx][ecx][edx][esi][edi];
-extern long msethlineshift(long,long);
-#pragma aux msethlineshift parm [eax][ebx];
-extern long thline(long,long,long,long,long,long);
-#pragma aux thline parm [eax][ebx][ecx][edx][esi][edi];
-extern long thlineskipmodify(long,long,long,long,long,long);
-#pragma aux thlineskipmodify parm [eax][ebx][ecx][edx][esi][edi];
-extern long tsethlineshift(long,long);
-#pragma aux tsethlineshift parm [eax][ebx];
-extern long setupslopevlin(long,long,long);
-#pragma aux setupslopevlin parm [eax][ebx][ecx] modify [edx];
-extern long slopevlin(long,long,long,long,long,long);
-#pragma aux slopevlin parm [eax][ebx][ecx][edx][esi][edi];
-extern long settransnormal();
-#pragma aux settransnormal parm;
-extern long settransreverse();
-#pragma aux settransreverse parm;
-extern long setupdrawslab(long,long);
-#pragma aux setupdrawslab parm [eax][ebx];
-extern long drawslab(long,long,long,long,long,long);
-#pragma aux drawslab parm [eax][ebx][ecx][edx][esi][edi];
+// PORT: the A.ASM routines are now C (a.c); their Watcom register-calling
+// declarations ("#pragma aux name parm [eax][ebx]...") are replaced by a.h.
+#include "a.h"
 
-#pragma aux nsqrtasm =\
-	"test eax, 0xff000000",\
-	"mov ebx, eax",\
-	"jnz short over24",\
-	"shr ebx, 12",\
-	"mov cx, word ptr shlookup[ebx*2]",\
-	"jmp short under24",\
-	"over24: shr ebx, 24",\
-	"mov cx, word ptr shlookup[ebx*2+8192]",\
-	"under24: shr eax, cl",\
-	"mov cl, ch",\
-	"mov ax, word ptr sqrtable[eax*2]",\
-	"shr eax, cl",\
-	parm nomemory [eax]\
-	modify exact [eax ebx ecx]\
+// PORT: C versions of the engine's inline assembly helpers.
 
-#pragma aux msqrtasm =\
-	"mov eax, 0x40000000",\
-	"mov ebx, 0x20000000",\
-	"begit: cmp ecx, eax",\
-	"jl skip",\
-	"sub ecx, eax",\
-	"lea eax, [eax+ebx*4]",\
-	"skip: sub eax, ebx",\
-	"shr eax, 1",\
-	"shr ebx, 2",\
-	"jnz begit",\
-	"cmp ecx, eax",\
-	"sbb eax, -1",\
-	"shr eax, 1",\
-	parm nomemory [ecx]\
-	modify exact [eax ebx ecx]\
+	// Square root using the shlookup/sqrtable tables (result is rounded down).
+static long nsqrtasm(unsigned long a)
+{
+	unsigned short cx;
+	if (a & 0xff000000) cx = shlookup[(a >> 24) + 4096];
+	else cx = shlookup[a >> 12];
+	a >>= (cx & 255);
+	return (long)(sqrtable[a] >> (cx >> 8));
+}
 
+	// Bitwise square root, rounded to nearest.
+static long msqrtasm(unsigned long c)
+{
+	unsigned long a = 0x40000000, b = 0x20000000;
+	do
+	{
+		if ((long)c >= (long)a) { c -= a; a += b*4; }
+		a -= b; a >>= 1; b >>= 2;
+	} while (b);
+	if (c >= a) a++;
+	return (long)(a >> 1);
+}
+
+	// Reciprocal via the float exponent/mantissa bits: (1<<?)/i using reciptable.
 	//0x007ff000 is (11<<13), 0x3f800000 is (127<<23)
-#pragma aux krecipasm =\
-	"mov fpuasm, eax",\
-	"fild dword ptr fpuasm",\
-	"add eax, eax",\
-	"fstp dword ptr fpuasm",\
-	"sbb ebx, ebx",\
-	"mov eax, fpuasm",\
-	"mov ecx, eax",\
-	"and eax, 0x007ff000",\
-	"shr eax, 10",\
-	"sub ecx, 0x3f800000",\
-	"shr ecx, 23",\
-	"mov eax, dword ptr reciptable[eax]",\
-	"sar eax, cl",\
-	"xor eax, ebx",\
-	parm [eax]\
-	modify exact [eax ebx ecx]\
+static long krecipasm(long i)
+{
+	float f = (float)i;
+	unsigned long u;
+	memcpy(&u, &f, 4);
+	return (reciptable[(u & 0x007ff000) >> 12] >> (((u - 0x3f800000) >> 23) & 31)) ^ (i >> 31);
+}
 
-#pragma aux setgotpic =\
-	"mov ebx, eax",\
-	"cmp byte ptr walock[eax], 200",\
-	"jae skipit",\
-	"mov byte ptr walock[eax], 199",\
-	"skipit: shr eax, 3",\
-	"and ebx, 7",\
-	"mov dl, byte ptr gotpic[eax]",\
-	"mov bl, byte ptr pow2char[ebx]",\
-	"or dl, bl",\
-	"mov byte ptr gotpic[eax], dl",\
-	parm [eax]\
-	modify exact [eax ebx ecx edx]\
+static void setgotpic(long tilenume)
+{
+	if (walock[tilenume] < 200) walock[tilenume] = 199;
+	gotpic[tilenume >> 3] |= pow2char[tilenume & 7];
+}
 
-#pragma aux getclipmask =\
-	"sar eax, 31",\
-	"add ebx, ebx",\
-	"adc eax, eax",\
-	"add ecx, ecx",\
-	"adc eax, eax",\
-	"add edx, edx",\
-	"adc eax, eax",\
-	"mov ebx, eax",\
-	"shl ebx, 4",\
-	"or al, 0xf0",\
-	"xor eax, ebx",\
-	parm [eax][ebx][ecx][edx]\
-	modify exact [eax ebx ecx edx]\
+	// Low nibble: sign bits of (a,b,c,d) as bits 3..0; high nibble: their inverse.
+static long getclipmask(long a, long b, long c, long d)
+{
+	long m = ((a < 0) << 3) | ((b < 0) << 2) | ((c < 0) << 1) | (d < 0);
+	return m | ((m ^ 15) << 4);
+}
 
 drawrooms(long daposx, long daposy, long daposz,
 			 short daang, long dahoriz, short dacursectnum)
@@ -2082,8 +1949,11 @@ setgamemode(char davidoption, long daxdim, long daydim)
 	vidoption = davidoption; xdim = daxdim; ydim = daydim;
 
 	strcpy(kensmessage,"!!!! BUILD engine&tools programmed by Ken Silverman of E.G. RI.  (c) Copyright 1995 Ken Silverman.  Summary:  BUILD = Ken. !!!!");
-	if (getkensmessagecrc(FP_OFF(kensmessage)) != 0x56c764d4)
-		{ setvmode(0x3); printf("Nice try.\n"); exit(0); }
+	// PORT: removed the checksum test of kensmessage (always passed for this constant string).
+
+	// PORT: Duke's chained/Tseng/S3 modes (0,3,4,5) and 320x200 mode 2 all use the
+	// emulated linear VESA path (one buffered page, presented by the platform layer).
+	davidoption = 1;
 
 	ostereomode = stereomode; if (stereomode) setstereo(0L);
 

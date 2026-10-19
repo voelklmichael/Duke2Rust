@@ -285,3 +285,11 @@ OTHER VARIABLES:
 		NUMSECTORS - the total number of existing sectors.  Modified every time
 			you call the loadboard function.
 ***************************************************************************/
+
+// PORT: declared in Ken's later BUILD.H; used by his released ENGINE.C.
+EXTERN long validmodecnt;
+EXTERN short validmode[256];
+EXTERN long validmodexdim[256], validmodeydim[256];
+
+// PORT: prototypes for all engine functions (originally implicit).
+#include "engine_protos.h"
