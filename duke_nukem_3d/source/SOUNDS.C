@@ -99,7 +99,7 @@ void SoundStartup( void )
       Error( FX_ErrorString( FX_Error ));
       }
 
-   status = FX_SetCallBack( TestCallBack );
+   status = FX_SetCallBack( (void (*)(unsigned long))TestCallBack );
 
    if ( status != FX_Ok )
       {
