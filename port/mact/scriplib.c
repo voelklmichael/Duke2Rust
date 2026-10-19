@@ -8,6 +8,7 @@
 #include "compat.h"
 #include "types.h"
 #include "util_lib.h"
+#include "file_lib.h"
 #include "scriplib.h"
 
 #define MAXSCRIPTFILES 20

@@ -282,7 +282,7 @@ static long getclipmask(long a, long b, long c, long d)
 	return m | ((m ^ 15) << 4);
 }
 
-drawrooms(long daposx, long daposy, long daposz,
+void drawrooms(long daposx, long daposy, long daposz,
 			 short daang, long dahoriz, short dacursectnum)
 {
 	long i, j, z, cz, fz, closest;
@@ -449,7 +449,7 @@ drawrooms(long daposx, long daposy, long daposz,
 	}
 }
 
-scansector (short sectnum)
+void scansector (short sectnum)
 {
 	walltype *wal, *wal2;
 	spritetype *spr;
@@ -584,7 +584,7 @@ skipitaddwall:
 	} while (sectorbordercnt > 0);
 }
 
-wallfront (long l1, long l2)
+int wallfront (long l1, long l2)
 {
 	walltype *wal;
 	long x11, y11, x21, y21, x12, y12, x22, y22, dx, dy, t1, t2;
@@ -618,7 +618,7 @@ wallfront (long l1, long l2)
 	return(-2);
 }
 
-spritewallfront (spritetype *s, long w)
+int spritewallfront (spritetype *s, long w)
 {
 	walltype *wal;
 	long x1, y1;
@@ -628,7 +628,7 @@ spritewallfront (spritetype *s, long w)
 	return (dmulscale32(wal->x-x1,s->y-y1,-(s->x-x1),wal->y-y1) >= 0);
 }
 
-bunchfront (long b1, long b2)
+int bunchfront (long b1, long b2)
 {
 	long x1b1, x2b1, x1b2, x2b2, b1f, b2f, i;
 
@@ -646,7 +646,7 @@ bunchfront (long b1, long b2)
 	return(wallfront(i,b2f));
 }
 
-drawalls (long bunch)
+void drawalls (long bunch)
 {
 	sectortype *sec, *nextsec;
 	walltype *wal;
@@ -999,7 +999,7 @@ drawalls (long bunch)
 	}
 }
 
-prepwall(long z, walltype *wal)
+void prepwall(long z, walltype *wal)
 {
 	long i, l, ol, splc, sinc, x, topinc, top, botinc, bot, hplc, walxrepeat;
 
@@ -1076,7 +1076,7 @@ prepwall(long z, walltype *wal)
 	}
 }
 
-ceilscan (long x1, long x2, long sectnum)
+void ceilscan (long x1, long x2, long sectnum)
 {
 	long i, j, ox, oy, x, y1, y2, twall, bwall;
 	sectortype *sec;
@@ -1242,7 +1242,7 @@ ceilscan (long x1, long x2, long sectnum)
 	faketimerhandler();
 }
 
-florscan (long x1, long x2, long sectnum)
+void florscan (long x1, long x2, long sectnum)
 {
 	long i, j, ox, oy, x, y1, y2, twall, bwall;
 	sectortype *sec;
@@ -1408,7 +1408,7 @@ florscan (long x1, long x2, long sectnum)
 	faketimerhandler();
 }
 
-wallscan(long x1, long x2, short *uwal, short *dwal, long *swal, long *lwal)
+void wallscan(long x1, long x2, short *uwal, short *dwal, long *swal, long *lwal)
 {
 	long i, x, xnice, ynice, fpalookup, shade;
 	long y1ve[4], y2ve[4], u4, d4, dax, z, tsizx, tsizy;
@@ -1530,7 +1530,7 @@ wallscan(long x1, long x2, short *uwal, short *dwal, long *swal, long *lwal)
 	faketimerhandler();
 }
 
-maskwallscan(long x1, long x2, short *uwal, short *dwal, long *swal, long *lwal)
+void maskwallscan(long x1, long x2, short *uwal, short *dwal, long *swal, long *lwal)
 {
 	long i, x, startx, xnice, ynice, fpalookup, shade;
 	long y1ve[4], y2ve[4], u4, d4, dax, z, p, tsizx, tsizy;
@@ -1656,7 +1656,7 @@ maskwallscan(long x1, long x2, short *uwal, short *dwal, long *swal, long *lwal)
 	faketimerhandler();
 }
 
-transmaskvline (long x)
+void transmaskvline (long x)
 {
 	long vplc, vinc, p, i, palookupoffs, shade, bufplc;
 	short y1v, y2v;
@@ -1684,7 +1684,7 @@ transmaskvline (long x)
 	transarea += y2v-y1v;
 }
 
-transmaskvline2 (long x)
+void transmaskvline2 (long x)
 {
 	long i, y1, y2, x2;
 	short y1ve[2], y2ve[2];
@@ -1753,7 +1753,7 @@ transmaskvline2 (long x)
 	faketimerhandler();
 }
 
-transmaskwallscan(long x1, long x2)
+void transmaskwallscan(long x1, long x2)
 {
 	long x, startx;
 
@@ -1772,7 +1772,7 @@ transmaskwallscan(long x1, long x2)
 	faketimerhandler();
 }
 
-loadboard(char *filename, long *daposx, long *daposy, long *daposz,
+int loadboard(char *filename, long *daposx, long *daposy, long *daposz,
 			 short *daang, short *dacursectnum)
 {
 	short fil, i, numsprites;
@@ -1816,7 +1816,7 @@ loadboard(char *filename, long *daposx, long *daposy, long *daposz,
 	return(0);
 }
 
-saveboard(char *filename, long *daposx, long *daposy, long *daposz,
+int saveboard(char *filename, long *daposx, long *daposy, long *daposz,
 			 short *daang, short *dacursectnum)
 {
 	short fil, i, j, numsprites;
@@ -1863,7 +1863,7 @@ saveboard(char *filename, long *daposx, long *daposy, long *daposz,
 	return(0);
 }
 
-loadtables()
+void loadtables()
 {
 	long i, fil;
 
@@ -1887,7 +1887,7 @@ loadtables()
 	}
 }
 
-loadpalette()
+void loadpalette()
 {
 	long i, j, k, dist, fil;
 	char *ptr;
@@ -1938,7 +1938,7 @@ loadpalette()
 }
 
 static char screenalloctype = 255;
-setgamemode(char davidoption, long daxdim, long daydim)
+int setgamemode(char davidoption, long daxdim, long daydim)
 {
 	long i, j, k, ostereomode;
 
@@ -2021,7 +2021,7 @@ setgamemode(char davidoption, long daxdim, long daydim)
 }
 
 
-hline (long xr, long yp)
+void hline (long xr, long yp)
 {
 	long xl, r, s;
 
@@ -2035,7 +2035,7 @@ hline (long xr, long yp)
 		ylookup[yp]+xr+frameoffset);
 }
 
-slowhline (long xr, long yp)
+void slowhline (long xr, long yp)
 {
 	long xl, x, y, ox, oy, r, p, shade;
 
@@ -2057,7 +2057,7 @@ slowhline (long xr, long yp)
 }
 
 long dommxoverlay = 1;
-initengine()
+void initengine()
 {
 	long i, j;
 
@@ -2108,7 +2108,7 @@ initengine()
 	loadpalette();
 }
 
-uninitengine()
+void uninitengine()
 {
 	long i;
 
@@ -2129,7 +2129,7 @@ uninitengine()
 		if (palookup[i] != NULL) { kkfree(palookup[i]); palookup[i] = NULL; }
 }
 
-nextpage()
+void nextpage()
 {
 	long totbytes, i, j, k;
 	permfifotype *per;
@@ -2226,7 +2226,7 @@ nextpage()
 }
 
 char cachedebug = 0;
-loadtile (short tilenume)
+void loadtile (short tilenume)
 {
 	char *ptr;
 	long i, dasiz;
@@ -2268,7 +2268,7 @@ loadtile (short tilenume)
 	artfilplc = tilefileoffs[tilenume]+dasiz;
 }
 
-allocatepermanenttile(short tilenume, long xsiz, long ysiz)
+int allocatepermanenttile(short tilenume, long xsiz, long ysiz)
 {
 	long i, j, x, y, dasiz;
 
@@ -2292,7 +2292,7 @@ allocatepermanenttile(short tilenume, long xsiz, long ysiz)
 	return(waloff[tilenume]);
 }
 
-loadpics(char *filename)
+int loadpics(char *filename)
 {
 	long offscount, siz, localtilestart, localtileend, dasiz;
 	short fil, i, j, k;
@@ -2373,7 +2373,7 @@ loadpics(char *filename)
 }
 
 #ifdef SUPERBUILD
-qloadkvx(long voxindex, char *filename)
+void qloadkvx(long voxindex, char *filename)
 {
 	long i, fil, dasiz, lengcnt, lengtot;
 	char *ptr;
@@ -2399,7 +2399,7 @@ qloadkvx(long voxindex, char *filename)
 }
 #endif
 
-clipinsidebox(long x, long y, short wallnum, long walldist)
+int clipinsidebox(long x, long y, short wallnum, long walldist)
 {
 	walltype *wal;
 	long x1, y1, x2, y2, r;
@@ -2425,7 +2425,7 @@ clipinsidebox(long x, long y, short wallnum, long walldist)
 	return((x2 >= y2)<<1);
 }
 
-clipinsideboxline(long x, long y, long x1, long y1, long x2, long y2, long walldist)
+int clipinsideboxline(long x, long y, long x1, long y1, long x2, long y2, long walldist)
 {
 	long r;
 
@@ -2451,7 +2451,7 @@ clipinsideboxline(long x, long y, long x1, long y1, long x2, long y2, long walld
 	return((x2 >= y2)<<1);
 }
 
-readpixel16(long p)
+int readpixel16(long p)
 {
 	long mask, dat;
 
@@ -2472,7 +2472,7 @@ readpixel16(long p)
 	return(dat);
 }
 
-screencapture(char *filename, char inverseit)
+int screencapture(char *filename, char inverseit)
 {
 	char *ptr;
 	long fil, i, bufplc, p, col, ncol, leng, numbytes, xres;
@@ -2598,7 +2598,7 @@ screencapture(char *filename, char inverseit)
 	return(0);
 }
 
-inside (long x, long y, short sectnum)
+int inside (long x, long y, short sectnum)
 {
 	walltype *wal;
 	long i, x1, y1, x2, y2;
@@ -2622,7 +2622,7 @@ inside (long x, long y, short sectnum)
 	return(cnt>>31);
 }
 
-getangle(long xvect, long yvect)
+int getangle(long xvect, long yvect)
 {
 	if ((xvect|yvect) == 0) return(0);
 	if (xvect == 0) return(512+((yvect<0)<<10));
@@ -2634,17 +2634,17 @@ getangle(long xvect, long yvect)
 	return(((radarang[640-scale(160,xvect,yvect)]>>6)+512+((yvect<0)<<10))&2047);
 }
 
-ksqrt(long num)
+int ksqrt(long num)
 {
 	return(nsqrtasm(num));
 }
 
-krecip(long num)
+int krecip(long num)
 {
 	return(krecipasm(num));
 }
 
-initksqrt()
+void initksqrt()
 {
 	long i, j, k;
 
@@ -2658,7 +2658,7 @@ initksqrt()
 	}
 }
 
-copytilepiece(long tilenume1, long sx1, long sy1, long xsiz, long ysiz,
+void copytilepiece(long tilenume1, long sx1, long sy1, long xsiz, long ysiz,
 				  long tilenume2, long sx2, long sy2)
 {
 	char *ptr1, *ptr2, dat;
@@ -2695,7 +2695,7 @@ copytilepiece(long tilenume1, long sx1, long sy1, long xsiz, long ysiz,
 	}
 }
 
-drawmasks()
+void drawmasks()
 {
 	long i, j, k, l, gap, xs, ys, zs, xp, yp, zp, z1, z2, yoff, yspan;
 
@@ -2837,7 +2837,7 @@ drawmasks()
 	while (maskwallcnt > 0) drawmaskwall(--maskwallcnt);
 }
 
-drawmaskwall(short damaskwallcnt)
+void drawmaskwall(short damaskwallcnt)
 {
 	long i, j, k, x, z, sectnum, z1, z2, lx, rx;
 	sectortype *sec, *nsec;
@@ -2929,7 +2929,7 @@ drawmaskwall(short damaskwallcnt)
 	}
 }
 
-drawsprite (long snum)
+void drawsprite (long snum)
 {
 	spritetype *tspr;
 	sectortype *sec;
@@ -3809,7 +3809,7 @@ drawsprite (long snum)
 }
 
 #ifdef SUPERBUILD
-drawvox(long dasprx, long daspry, long dasprz, long dasprang,
+void drawvox(long dasprx, long daspry, long dasprz, long dasprang,
 		  long daxscale, long dayscale, char daindex,
 		  signed char dashade, char dapal, long *daumost, long *dadmost)
 {
@@ -4019,7 +4019,7 @@ drawvox(long dasprx, long daspry, long dasprz, long dasprang,
 }
 #endif
 
-ceilspritescan (long x1, long x2)
+void ceilspritescan (long x1, long x2)
 {
 	long x, y1, y2, twall, bwall;
 
@@ -4053,7 +4053,7 @@ ceilspritescan (long x1, long x2)
 	faketimerhandler();
 }
 
-ceilspritehline (long x2, long y)
+void ceilspritehline (long x2, long y)
 {
 	long x1, v, bx, by;
 
@@ -4080,7 +4080,7 @@ ceilspritehline (long x2, long y)
 	}
 }
 
-setsprite(short spritenum, long newx, long newy, long newz)
+int setsprite(short spritenum, long newx, long newy, long newz)
 {
 	short bad, j, tempsectnum;
 
@@ -4098,7 +4098,7 @@ setsprite(short spritenum, long newx, long newy, long newz)
 	return(0);
 }
 
-animateoffs(short tilenum, short fakevar)
+int animateoffs(short tilenum, short fakevar)
 {
 	long i, k, offs;
 
@@ -4125,7 +4125,7 @@ animateoffs(short tilenum, short fakevar)
 	return(offs);
 }
 
-initspritelists()
+void initspritelists()
 {
 	long i;
 
@@ -4155,13 +4155,13 @@ initspritelists()
 	nextspritestat[MAXSPRITES-1] = -1;
 }
 
-insertsprite(short sectnum, short statnum)
+int insertsprite(short sectnum, short statnum)
 {
 	insertspritestat(statnum);
 	return(insertspritesect(sectnum));
 }
 
-insertspritesect(short sectnum)
+int insertspritesect(short sectnum)
 {
 	short blanktouse;
 
@@ -4185,7 +4185,7 @@ insertspritesect(short sectnum)
 	return(blanktouse);
 }
 
-insertspritestat(short statnum)
+int insertspritestat(short statnum)
 {
 	short blanktouse;
 
@@ -4209,13 +4209,13 @@ insertspritestat(short statnum)
 	return(blanktouse);
 }
 
-deletesprite(short spritenum)
+int deletesprite(short spritenum)
 {
 	deletespritestat(spritenum);
 	return(deletespritesect(spritenum));
 }
 
-deletespritesect(short deleteme)
+int deletespritesect(short deleteme)
 {
 	if (sprite[deleteme].sectnum == MAXSECTORS)
 		return(-1);
@@ -4235,7 +4235,7 @@ deletespritesect(short deleteme)
 	return(0);
 }
 
-deletespritestat (short deleteme)
+int deletespritestat (short deleteme)
 {
 	if (sprite[deleteme].statnum == MAXSTATUS)
 		return(-1);
@@ -4255,7 +4255,7 @@ deletespritestat (short deleteme)
 	return(0);
 }
 
-changespritesect(short spritenum, short newsectnum)
+int changespritesect(short spritenum, short newsectnum)
 {
 	if ((newsectnum < 0) || (newsectnum > MAXSECTORS)) return(-1);
 	if (sprite[spritenum].sectnum == newsectnum) return(0);
@@ -4265,7 +4265,7 @@ changespritesect(short spritenum, short newsectnum)
 	return(0);
 }
 
-changespritestat(short spritenum, short newstatnum)
+int changespritestat(short spritenum, short newstatnum)
 {
 	if ((newstatnum < 0) || (newstatnum > MAXSTATUS)) return(-1);
 	if (sprite[spritenum].statnum == newstatnum) return(0);
@@ -4275,7 +4275,7 @@ changespritestat(short spritenum, short newstatnum)
 	return(0);
 }
 
-nextsectorneighborz(short sectnum, long thez, short topbottom, short direction)
+int nextsectorneighborz(short sectnum, long thez, short topbottom, short direction)
 {
 	walltype *wal;
 	long i, testz, nextz;
@@ -4339,7 +4339,7 @@ nextsectorneighborz(short sectnum, long thez, short topbottom, short direction)
 	return(sectortouse);
 }
 
-cansee(long x1, long y1, long z1, short sect1, long x2, long y2, long z2, short sect2)
+int cansee(long x1, long y1, long z1, short sect1, long x2, long y2, long z2, short sect2)
 {
 	sectortype *sec;
 	walltype *wal, *wal2;
@@ -4385,7 +4385,7 @@ cansee(long x1, long y1, long z1, short sect1, long x2, long y2, long z2, short 
 	return(0);
 }
 
-hitscan(long xs, long ys, long zs, short sectnum, long vx, long vy, long vz,
+int hitscan(long xs, long ys, long zs, short sectnum, long vx, long vy, long vz,
 	short *hitsect, short *hitwall, short *hitsprite,
 	long *hitx, long *hity, long *hitz, unsigned long cliptype)
 {
@@ -4654,7 +4654,7 @@ hitscan(long xs, long ys, long zs, short sectnum, long vx, long vy, long vz,
 	return(0);
 }
 
-neartag (long xs, long ys, long zs, short sectnum, short ange, short *neartagsector, short *neartagwall, short *neartagsprite, long *neartaghitdist, long neartagrange, char tagsearch)
+int neartag (long xs, long ys, long zs, short sectnum, short ange, short *neartagsector, short *neartagwall, short *neartagsprite, long *neartaghitdist, long neartagrange, char tagsearch)
 {
 	walltype *wal, *wal2;
 	spritetype *spr;
@@ -4772,7 +4772,7 @@ neartag (long xs, long ys, long zs, short sectnum, short ange, short *neartagsec
 	return(0);
 }
 
-lintersect(long x1, long y1, long z1, long x2, long y2, long z2, long x3,
+int lintersect(long x1, long y1, long z1, long x2, long y2, long z2, long x3,
 			  long y3, long x4, long y4, long *intx, long *inty, long *intz)
 {     //p1 to p2 is a line segment
 	long x21, y21, x34, y34, x31, y31, bot, topt, topu, t;
@@ -4800,7 +4800,7 @@ lintersect(long x1, long y1, long z1, long x2, long y2, long z2, long x3,
 	return(1);
 }
 
-rintersect(long x1, long y1, long z1, long vx, long vy, long vz, long x3,
+int rintersect(long x1, long y1, long z1, long vx, long vy, long vz, long x3,
 			  long y3, long x4, long y4, long *intx, long *inty, long *intz)
 {     //p1 towards p2 is a ray
 	long x34, y34, x31, y31, bot, topt, topu, t;
@@ -4827,7 +4827,7 @@ rintersect(long x1, long y1, long z1, long vx, long vy, long vz, long x3,
 	return(1);
 }
 
-dragpoint(short pointhighlight, long dax, long day)
+void dragpoint(short pointhighlight, long dax, long day)
 {
 	short cnt, tempshort;
 
@@ -4869,7 +4869,7 @@ dragpoint(short pointhighlight, long dax, long day)
 	while ((tempshort != pointhighlight) && (cnt > 0));
 }
 
-lastwall(short point)
+int lastwall(short point)
 {
 	long i, j, cnt;
 
@@ -4895,7 +4895,7 @@ lastwall(short point)
 }                                                        \
 
 long clipmoveboxtracenum = 3;
-clipmove (long *x, long *y, long *z, short *sectnum,
+int clipmove (long *x, long *y, long *z, short *sectnum,
 			 long xvect, long yvect,
 			 long walldist, long ceildist, long flordist, unsigned long cliptype)
 {
@@ -5214,7 +5214,7 @@ clipmove (long *x, long *y, long *z, short *sectnum,
 	return(retval);
 }
 
-keepaway (long *x, long *y, long w)
+void keepaway (long *x, long *y, long w)
 {
 	long dx, dy, ox, oy, x1, y1;
 	char first;
@@ -5231,7 +5231,7 @@ keepaway (long *x, long *y, long w)
 	}
 }
 
-raytrace (long x3, long y3, long *x4, long *y4)
+int raytrace (long x3, long y3, long *x4, long *y4)
 {
 	long x1, y1, x2, y2, t, bot, topu, nintx, ninty, cnt, z, hitwall;
 	long x21, y21, x43, y43;
@@ -5264,7 +5264,7 @@ raytrace (long x3, long y3, long *x4, long *y4)
 	return(hitwall);
 }
 
-pushmove (long *x, long *y, long *z, short *sectnum,
+int pushmove (long *x, long *y, long *z, short *sectnum,
 			 long walldist, long ceildist, long flordist, unsigned long cliptype)
 {
 	sectortype *sec, *sec2;
@@ -5397,7 +5397,7 @@ pushmove (long *x, long *y, long *z, short *sectnum,
 	return(bad);
 }
 
-updatesector(long x, long y, short *sectnum)
+void updatesector(long x, long y, short *sectnum)
 {
 	walltype *wal;
 	long i, j;
@@ -5432,7 +5432,7 @@ updatesector(long x, long y, short *sectnum)
 	*sectnum = -1;
 }
 
-rotatepoint(long xpivot, long ypivot, long x, long y, short daang, long *x2, long *y2)
+void rotatepoint(long xpivot, long ypivot, long x, long y, short daang, long *x2, long *y2)
 {
 	long dacos, dasin;
 
@@ -5444,24 +5444,24 @@ rotatepoint(long xpivot, long ypivot, long x, long y, short daang, long *x2, lon
 	*y2 = dmulscale14(y,dacos,x,dasin) + ypivot;
 }
 
-initmouse()
+int initmouse()
 {
 	return(moustat = setupmouse());
 }
 
-getmousevalues(short *mousx, short *mousy, short *bstatus)
+void getmousevalues(short *mousx, short *mousy, short *bstatus)
 {
 	if (moustat == 0) { *mousx = 0; *mousy = 0; *bstatus = 0; return; }
 	readmousexy(mousx,mousy);
 	readmousebstatus(bstatus);
 }
 
-printscreeninterrupt()
+void printscreeninterrupt()
 {
 	int5();
 }
 
-drawline256 (long x1, long y1, long x2, long y2, char col)
+void drawline256 (long x1, long y1, long x2, long y2, char col)
 {
 	long dx, dy, i, j, p, inc, plc, daend;
 
@@ -5535,7 +5535,7 @@ drawline256 (long x1, long y1, long x2, long y2, char col)
 	}
 }
 
-drawline16(long x1, long y1, long x2, long y2, char col)
+void drawline16(long x1, long y1, long x2, long y2, char col)
 {
 	long i, dx, dy, p, pinc, d;
 	char lmask, rmask;
@@ -5635,7 +5635,7 @@ drawline16(long x1, long y1, long x2, long y2, char col)
 	}
 }
 
-qsetmode640350()
+void qsetmode640350()
 {
 	if (qsetmode != 350)
 	{
@@ -5654,7 +5654,7 @@ qsetmode640350()
 	qsetmode = 350;
 }
 
-qsetmode640480()
+void qsetmode640480()
 {
 	short i;
 
@@ -5682,7 +5682,7 @@ qsetmode640480()
 	qsetmode = 480;
 }
 
-clear2dscreen()
+void clear2dscreen()
 {
 	if (qsetmode == 350)
 		fillscreen16(pageoffset>>3,0L,640L*350L);
@@ -5693,7 +5693,7 @@ clear2dscreen()
 	}
 }
 
-draw2dgrid(long posxe, long posye, short ange, long zoome, short gride)
+void draw2dgrid(long posxe, long posye, short ange, long zoome, short gride)
 {
 	long i, xp1, yp1, xp2, yp2, tempy, templong;
 	char mask;
@@ -5760,7 +5760,7 @@ draw2dgrid(long posxe, long posye, short ange, long zoome, short gride)
 	}
 }
 
-draw2dscreen(long posxe, long posye, short ange, long zoome, short gride)
+void draw2dscreen(long posxe, long posye, short ange, long zoome, short gride)
 {
 	walltype *wal;
 	long i, j, k, xp1, yp1, xp2, yp2, tempy, templong;
@@ -5939,7 +5939,7 @@ draw2dscreen(long posxe, long posye, short ange, long zoome, short gride)
 	drawline16(320+xp1,200+yp1,320-yp1,200+xp1,15);
 }
 
-printext16(long xpos, long ypos, short col, short backcol, char name[82], char fontsize)
+void printext16(long xpos, long ypos, short col, short backcol, char name[82], char fontsize)
 {
 	long p, z, zz, charxsiz, daxpos;
 	char ch, dat, mask, *fontptr;
@@ -6030,7 +6030,7 @@ printext16(long xpos, long ypos, short col, short backcol, char name[82], char f
 	koutp(0x3ce,0x5); koutp(0x3cf,(kinp(0x3cf)&(255-3))+0);
 }
 
-printext256(long xpos, long ypos, short col, short backcol, char name[82], char fontsize)
+void printext256(long xpos, long ypos, short col, short backcol, char name[82], char fontsize)
 {
 	long stx, i, x, y, charxsiz;
 	char *fontptr, *letptr, *ptr;
@@ -6059,13 +6059,13 @@ printext256(long xpos, long ypos, short col, short backcol, char name[82], char 
 	}
 }
 
-krand()
+int krand()
 {
 	randomseed = (randomseed*27584621)+1;
 	return(((unsigned long)randomseed)>>16);
 }
 
-getzrange(long x, long y, long z, short sectnum,
+void getzrange(long x, long y, long z, short sectnum,
 			 long *ceilz, long *ceilhit, long *florz, long *florhit,
 			 long walldist, unsigned long cliptype)
 {
@@ -6259,7 +6259,7 @@ getzrange(long x, long y, long z, short sectnum,
 	}
 }
 
-setview(long x1, long y1, long x2, long y2)
+void setview(long x1, long y1, long x2, long y2)
 {
 	long i, j;
 
@@ -6290,7 +6290,7 @@ setview(long x1, long y1, long x2, long y2)
 	}
 }
 
-setaspect(long daxrange, long daaspect)
+void setaspect(long daxrange, long daaspect)
 {
 	viewingrange = daxrange;
 	viewingrangerecip = divscale32(1L,daxrange);
@@ -6301,7 +6301,7 @@ setaspect(long daxrange, long daaspect)
 	xdimscale = scale(320,xyaspect,xdimen);
 }
 
-dosetaspect()
+void dosetaspect()
 {
 	long i, j, k, x, y, xinc;
 
@@ -6337,12 +6337,12 @@ dosetaspect()
 	}
 }
 
-flushperms()
+void flushperms()
 {
 	permhead = permtail = 0;
 }
 
-rotatesprite (long sx, long sy, long z, short a, short picnum, signed char dashade, char dapalnum, char dastat, long cx1, long cy1, long cx2, long cy2)
+void rotatesprite (long sx, long sy, long z, short a, short picnum, signed char dashade, char dapalnum, char dastat, long cx1, long cy1, long cx2, long cy2)
 {
 	long i;
 	permfifotype *per, *per2;
@@ -6412,7 +6412,7 @@ rotatesprite (long sx, long sy, long z, short a, short picnum, signed char dasha
 	}
 }
 
-dorotatesprite (long sx, long sy, long z, short a, short picnum, signed char dashade, char dapalnum, char dastat, long cx1, long cy1, long cx2, long cy2)
+void dorotatesprite (long sx, long sy, long z, short a, short picnum, signed char dashade, char dapalnum, char dastat, long cx1, long cy1, long cx2, long cy2)
 {
 	long cosang, sinang, v, nextv, dax1, dax2, oy, bx, by, ny1, ny2;
 	long i, x, y, x1, y1, x2, y2, gx1, gy1, p, bufplc, palookupoffs;
@@ -6803,7 +6803,7 @@ dorotatesprite (long sx, long sy, long z, short a, short picnum, signed char das
 }
 
 	//Assume npoints=4 with polygon on &rx1,&ry1
-clippoly4(long cx1, long cy1, long cx2, long cy2)
+int clippoly4(long cx1, long cy1, long cx2, long cy2)
 {
 	long n, nn, z, zz, x, x1, x2, y, y1, y2, t;
 
@@ -6854,7 +6854,7 @@ clippoly4(long cx1, long cy1, long cx2, long cy2)
 	return(n);
 }
 
-makepalookup(long palnum, char *remapbuf, signed char r, signed char g, signed char b, char dastat)
+void makepalookup(long palnum, char *remapbuf, signed char r, signed char g, signed char b, char dastat)
 {
 	long i, j, dist, palscale;
 	char *ptr, *ptr2;
@@ -6909,7 +6909,7 @@ makepalookup(long palnum, char *remapbuf, signed char r, signed char g, signed c
 	}
 }
 
-initfastcolorlookup(long rscale, long gscale, long bscale)
+void initfastcolorlookup(long rscale, long gscale, long bscale)
 {
 	long i, j, x, y, z;
 	char *pal1;
@@ -6944,7 +6944,7 @@ initfastcolorlookup(long rscale, long gscale, long bscale)
 	i = colscan[13]; colscan[13] = colscan[26]; colscan[26] = i;
 }
 
-getclosestcol(long r, long g, long b)
+int getclosestcol(long r, long g, long b)
 {
 	long x, y, z, i, j, k, dist, mindist, retcol;
 	char *pal1;
@@ -6991,7 +6991,7 @@ getclosestcol(long r, long g, long b)
 	return(retcol);
 }
 
-setbrightness(char dabrightness, char *dapal)
+void setbrightness(char dabrightness, char *dapal)
 {
 	char *ptr;
 	long i, j, k, dist, daval;
@@ -7024,7 +7024,7 @@ setbrightness(char dabrightness, char *dapal)
 	VBE_setPalette(0,256,tempbuf);
 }
 
-drawmapview (long dax, long day, long zoome, short ang)
+void drawmapview (long dax, long day, long zoome, short ang)
 {
 	walltype *wal;
 	sectortype *sec;
@@ -7280,7 +7280,7 @@ drawmapview (long dax, long day, long zoome, short ang)
 	}
 }
 
-clippoly (long npoints, long clipstat)
+int clippoly (long npoints, long clipstat)
 {
 	long z, zz, s1, s2, t, npoints2, start2, z1, z2, z3, z4, splitcnt;
 	long cx1, cy1, cx2, cy2;
@@ -7484,7 +7484,7 @@ clippoly (long npoints, long clipstat)
 	return(npoints);
 }
 
-fillpolygon(long npoints)
+void fillpolygon(long npoints)
 {
 	long z, zz, zzz, x1, y1, x2, y2, miny, maxy, x, y, xinc, cnt;
 	long ox, oy, bx, by, bxinc, byinc, xend, p, r, day1, day2;
@@ -7584,7 +7584,7 @@ fillpolygon(long npoints)
 	faketimerhandler();
 }
 
-clearview(long dacol)
+void clearview(long dacol)
 {
 	long i, p, y, x1, x2, dx;
 	char *ptr;
@@ -7611,7 +7611,7 @@ clearview(long dacol)
 	faketimerhandler();
 }
 
-clearallviews(long dacol)
+void clearallviews(long dacol)
 {
 	long i;
 
@@ -7637,7 +7637,7 @@ clearallviews(long dacol)
 	faketimerhandler();
 }
 
-plotpixel(long x, long y, char col)
+void plotpixel(long x, long y, char col)
 {
 	drawpixel(ylookup[y]+x+frameplace,(long)col);
 }
@@ -7654,7 +7654,7 @@ static long bakframeplace[4], bakxsiz[4], bakysiz[4];
 static long bakwindowx1[4], bakwindowy1[4];
 static long bakwindowx2[4], bakwindowy2[4];
 
-setviewtotile(short tilenume, long xsiz, long ysiz)
+void setviewtotile(short tilenume, long xsiz, long ysiz)
 {
 	long i, j;
 
@@ -7674,7 +7674,7 @@ setviewtotile(short tilenume, long xsiz, long ysiz)
 	setviewcnt++;
 }
 
-setviewback()
+void setviewback()
 {
 	long i, j, k, xsiz, ysiz;
 
@@ -7695,7 +7695,7 @@ setviewback()
 	setvlinebpl(bytesperline);
 }
 
-squarerotatetile(short tilenume)
+void squarerotatetile(short tilenume)
 {
 	long i, j, k, xsiz, ysiz;
 	char *ptr1, *ptr2;
@@ -7716,7 +7716,7 @@ squarerotatetile(short tilenume)
 	}
 }
 
-preparemirror(long dax, long day, long daz, short daang, long dahoriz, short dawall, short dasector, long *tposx, long *tposy, short *tang)
+void preparemirror(long dax, long day, long daz, short daang, long dahoriz, short dawall, short dasector, long *tposx, long *tposy, short *tang)
 {
 	long i, j, x, y, dx, dy;
 
@@ -7731,7 +7731,7 @@ preparemirror(long dax, long day, long daz, short daang, long dahoriz, short daw
 	inpreparemirror = 1;
 }
 
-completemirror()
+void completemirror()
 {
 	long i, dy, p;
 
@@ -7755,7 +7755,7 @@ completemirror()
 	}
 }
 
-sectorofwall(short theline)
+int sectorofwall(short theline)
 {
 	long i, j, gap;
 
@@ -7773,7 +7773,7 @@ sectorofwall(short theline)
 	return(i);
 }
 
-getceilzofslope(short sectnum, long dax, long day)
+int getceilzofslope(short sectnum, long dax, long day)
 {
 	long dx, dy, i, j;
 	walltype *wal;
@@ -7786,7 +7786,7 @@ getceilzofslope(short sectnum, long dax, long day)
 	return(sector[sectnum].ceilingz+scale(sector[sectnum].ceilingheinum,j,i));
 }
 
-getflorzofslope(short sectnum, long dax, long day)
+int getflorzofslope(short sectnum, long dax, long day)
 {
 	long dx, dy, i, j;
 	walltype *wal;
@@ -7799,7 +7799,7 @@ getflorzofslope(short sectnum, long dax, long day)
 	return(sector[sectnum].floorz+scale(sector[sectnum].floorheinum,j,i));
 }
 
-getzsofslope(short sectnum, long dax, long day, long *ceilz, long *florz)
+void getzsofslope(short sectnum, long dax, long day, long *ceilz, long *florz)
 {
 	long dx, dy, i, j;
 	walltype *wal, *wal2;
@@ -7818,7 +7818,7 @@ getzsofslope(short sectnum, long dax, long day, long *ceilz, long *florz)
 	}
 }
 
-alignceilslope(short dasect, long x, long y, long z)
+void alignceilslope(short dasect, long x, long y, long z)
 {
 	long i, dax, day;
 	walltype *wal;
@@ -7835,7 +7835,7 @@ alignceilslope(short dasect, long x, long y, long z)
 												 else sector[dasect].ceilingstat |= 2;
 }
 
-alignflorslope(short dasect, long x, long y, long z)
+void alignflorslope(short dasect, long x, long y, long z)
 {
 	long i, dax, day;
 	walltype *wal;
@@ -7852,7 +7852,7 @@ alignflorslope(short dasect, long x, long y, long z)
 											  else sector[dasect].floorstat |= 2;
 }
 
-owallmost(short *mostbuf, long w, long z)
+int owallmost(short *mostbuf, long w, long z)
 {
 	long bad, x, intx, inty, xcross, y, yy, yinc;
 	long s1, s2, s3, s4, ix1, ix2, iy1, iy2, t, x1, x2;
@@ -7925,7 +7925,7 @@ owallmost(short *mostbuf, long w, long z)
 	return(bad);
 }
 
-wallmost(short *mostbuf, long w, long sectnum, char dastat)
+int wallmost(short *mostbuf, long w, long sectnum, char dastat)
 {
 	long bad, i, j, t, x, y, z, intx, inty, intz, xcross, yinc, fw;
 	long x1, y1, z1, x2, y2, z2, xv, yv, dx, dy, dasqr, oz1, oz2;
@@ -8074,7 +8074,7 @@ wallmost(short *mostbuf, long w, long sectnum, char dastat)
 }
 
 #define BITSOFPRECISION 3  //Don't forget to change this in A.ASM also!
-grouscan (long dax1, long dax2, long sectnum, char dastat)
+void grouscan (long dax1, long dax2, long sectnum, char dastat)
 {
 	long i, j, k, l, m, n, x, y, dx, dy, wx, wy, x1, y1, x2, y2, daz;
 	long daslope, dasqr;
@@ -8232,12 +8232,12 @@ grouscan (long dax1, long dax2, long sectnum, char dastat)
 	}
 }
 
-getpalookup(long davis, long dashade)
+int getpalookup(long davis, long dashade)
 {
 	return(min(max(dashade+(davis>>8),0),numpalookups-1));
 }
 
-parascan (long dax1, long dax2, long sectnum, char dastat, long bunch)
+void parascan (long dax1, long dax2, long sectnum, char dastat, long bunch)
 {
 	sectortype *sec;
 	long i, j, k, l, m, n, x, y, z, wallnum, nextsectnum, globalhorizbak;
@@ -8375,7 +8375,7 @@ parascan (long dax1, long dax2, long sectnum, char dastat, long bunch)
 	globalhoriz = globalhorizbak;
 }
 
-interrupt stereohandler1()
+void interrupt stereohandler1()
 {
 		//VR flag
 	if (kinp(0x3c2)&128)
@@ -8395,7 +8395,7 @@ interrupt stereohandler1()
 	koutp(0x20,0x20);
 }
 
-interrupt stereohandler2()
+void interrupt stereohandler2()
 {
 		//VR flag
 	if (kinp(0x3c2)&128)
@@ -8416,7 +8416,7 @@ interrupt stereohandler2()
 	koutp(0x20,0x20);
 }
 
-stereonextpage()
+void stereonextpage()
 {
 	koutp(0x70,0xc); kinp(0x71);
 	//koutpw(0x70,0x420b);
@@ -8441,7 +8441,7 @@ stereonextpage()
 	setactivepage(activepage);
 }
 
-setstereo(long dastereomode)
+void setstereo(long dastereomode)
 {
 	long i, dist, blackdist, whitedist, t1, t2, numlines;
 	char c1, c2;
@@ -8557,7 +8557,7 @@ void *engconvalloc32 (unsigned long size)
 	 return ((void *)((r.x.eax&0xffff)<<4));   //Returns full 32-bit offset
 }
 
-installbistereohandlers(void far *stereohan)
+void installbistereohandlers(void far *stereohan)
 {
 	char *ptr;
 	union REGS r;
@@ -8603,7 +8603,7 @@ installbistereohandlers(void far *stereohan)
 	int386(0x31,&r,&r);
 }
 
-uninstallbistereohandlers()
+void uninstallbistereohandlers()
 {
 	union REGS r;
 	struct SREGS sr;
@@ -8623,7 +8623,7 @@ uninstallbistereohandlers()
 	int386(0x31,&r,&r);
 }
 
-loopnumofsector(short sectnum, short wallnum)
+int loopnumofsector(short sectnum, short wallnum)
 {
 	long i, numloops, startwall, endwall;
 
@@ -8638,7 +8638,7 @@ loopnumofsector(short sectnum, short wallnum)
 	return(-1);
 }
 
-setfirstwall(short sectnum, short newfirstwall)
+void setfirstwall(short sectnum, short newfirstwall)
 {
 	long i, j, k, numwallsofloop;
 	long startwall, endwall, danumwalls, dagoalloop;

@@ -13,7 +13,7 @@ char permanentupdate = 0, vgacompatible = 1;
 
 #define qlimitrate()
 
-setvesa(long x, long y)
+int setvesa(long x, long y)
 {
 	if (platform_setvideomode(x, y) < 0) return(-1);
 	xres = x; yres = y;
@@ -36,18 +36,18 @@ void setvisualpage(long dapagenum)
 	platform_present((unsigned char *)screen, xres, yres, bytesperline);
 }
 
-uninitvesa()
+void uninitvesa()
 {
 	platform_closevideo();
 }
 
 	// dapal: num entries of 4 bytes (blue, green, red, unused), 6 bits per channel.
-VBE_setPalette(long start, long num, char *dapal)
+void VBE_setPalette(long start, long num, char *dapal)
 {
 	platform_setpalette(start, num, (unsigned char *)dapal);
 }
 
-VBE_getPalette(long start, long num, char *dapal)
+void VBE_getPalette(long start, long num, char *dapal)
 {
 	platform_getpalette(start, num, (unsigned char *)dapal);
 }

@@ -9,6 +9,7 @@
 #include <process.h>
 #include <stdarg.h>
 #include "pragmas.h"
+#include "build.h"  // PORT: Build types and engine prototypes (originally implicit)
 
 #define MAXPLAYERS 16
 #define BAKSIZ 16384
@@ -32,7 +33,7 @@ long crctable[256];
 static char lastpacket[576], inlastpacket = 0;
 static short lastpacketfrom, lastpacketleng;
 
-extern long totalclock;  //MUST EXTERN 1 ANNOYING VARIABLE FROM GAME
+// PORT: totalclock is declared in build.h (volatile)
 static long timeoutcount = 60, resendagaincount = 4, lastsendtime[MAXPLAYERS];
 
 static short bakpacketptr[MAXPLAYERS][256], bakpacketlen[MAXPLAYERS][256];
@@ -63,11 +64,11 @@ static gcomtype *gcom;
 
 // PORT: there is no DOS network driver (COMMIT) to call. Only reached with
 // numplayers >= 2, which needs the "net" command line option.
-callcommit()
+void callcommit()
 {
 }
 
-initmultiplayers(char damultioption, char dacomrateoption, char dapriority)
+void initmultiplayers(char damultioption, char dacomrateoption, char dapriority)
 {
 	long i;
 	char *parm, delims[4] = {'\\','-','/','\0'};
@@ -104,7 +105,7 @@ initmultiplayers(char damultioption, char dacomrateoption, char dapriority)
 	for(i=0;i<numplayers;i++) lastsendtime[i] = totalclock;
 }
 
-initcrc()
+void initcrc()
 {
 	long i, j, k, a;
 
@@ -123,7 +124,7 @@ initcrc()
 	}
 }
 
-setpackettimeout(long datimeoutcount, long daresendagaincount)
+void setpackettimeout(long datimeoutcount, long daresendagaincount)
 {
 	long i;
 
@@ -132,7 +133,7 @@ setpackettimeout(long datimeoutcount, long daresendagaincount)
 	for(i=0;i<numplayers;i++) lastsendtime[i] = totalclock;
 }
 
-getcrc(char *buffer, short bufleng)
+int getcrc(char *buffer, short bufleng)
 {
 	long i, j;
 
@@ -141,15 +142,15 @@ getcrc(char *buffer, short bufleng)
 	return(j&65535);
 }
 
-uninitmultiplayers()
+void uninitmultiplayers()
 {
 }
 
-sendlogon()
+void sendlogon()
 {
 }
 
-sendlogoff()
+void sendlogoff()
 {
 	long i;
 	char tempbuf[2];
@@ -160,16 +161,16 @@ sendlogoff()
 		if (i != myconnectindex)
 			sendpacket(i,tempbuf,2L);
 }
-getoutputcirclesize()
+int getoutputcirclesize()
 {
 	return(0);
 }
 
-setsocket(short newsocket)
+void setsocket(short newsocket)
 {
 }
 
-sendpacket(long other, char *bufptr, long messleng)
+void sendpacket(long other, char *bufptr, long messleng)
 {
 	long i, j, k, l,cnt;
 	unsigned short dacrc;
@@ -200,7 +201,7 @@ sendpacket(long other, char *bufptr, long messleng)
 	dosendpackets(other);
 }
 
-dosendpackets(long other)
+void dosendpackets(long other)
 {
 	long i, j, k, messleng;
 	unsigned short dacrc;
@@ -414,7 +415,7 @@ short getpacket (short *other, char *bufptr)
 	return(messleng);
 }
 
-flushpackets()
+void flushpackets()
 {
 	/*long i;
 
@@ -438,7 +439,7 @@ flushpackets()
 	}*/
 }
 
-genericmultifunction(long other, char *bufptr, long messleng, long command)
+void genericmultifunction(long other, char *bufptr, long messleng, long command)
 {
 	if (numplayers < 2) return;
 

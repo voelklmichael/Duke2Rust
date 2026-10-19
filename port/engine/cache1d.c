@@ -5,6 +5,7 @@
 #include <dos.h>
 #include <stdio.h>
 #include "pragmas.h"
+#include "build.h"  // PORT: Build types and engine prototypes (originally implicit)
 
 //   This module keeps track of a standard linear cacheing system.
 //   To use this module, here's all you need to do:
@@ -44,7 +45,7 @@ typedef struct { long *hand, leng; char *lock; } cactype;
 cactype cac[MAXCACHEOBJECTS];
 static long lockrecip[200];
 
-initcache(long dacachestart, long dacachesize)
+void initcache(long dacachestart, long dacachesize)
 {
 	long i;
 
@@ -58,7 +59,7 @@ initcache(long dacachestart, long dacachesize)
 	cacnum = 1;
 }
 
-allocache (long *newhandle, long newbytes, char *newlockptr)
+void allocache (long *newhandle, long newbytes, char *newlockptr)
 {
 	long i, j, z, zz, bestz, daval, bestval, besto, o1, o2, sucklen, suckz;
 
@@ -135,7 +136,7 @@ allocache (long *newhandle, long newbytes, char *newlockptr)
 	cac[bestz].lock = &zerochar;
 }
 
-suckcache (long *suckptr)
+void suckcache (long *suckptr)
 {
 	long i;
 
@@ -161,7 +162,7 @@ suckcache (long *suckptr)
 		}
 }
 
-agecache()
+void agecache()
 {
 	long cnt;
 	char ch;
@@ -177,7 +178,7 @@ agecache()
 	}
 }
 
-reportandexit(char *errormessage)
+void reportandexit(char *errormessage)
 {
 	long i, j;
 
@@ -246,7 +247,7 @@ static long filehan[MAXOPENFILES] =
 	-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 };
 
-initgroupfile(char *filename)
+int initgroupfile(char *filename)
 {
 	char buf[16];
 	long i, j, k;
@@ -290,7 +291,7 @@ initgroupfile(char *filename)
 	return(groupfil[numgroupfiles-1]);
 }
 
-uninitgroupfile()
+void uninitgroupfile()
 {
 	long i;
 
@@ -304,7 +305,7 @@ uninitgroupfile()
 		}
 }
 
-kopen4load(char *filename, char searchfirst)
+int kopen4load(char *filename, char searchfirst)
 {
 	long i, j, k, fil, newhandle;
 	char bad, *gfileptr;
@@ -356,7 +357,7 @@ kopen4load(char *filename, char searchfirst)
 	return(-1);
 }
 
-kread(long handle, void *buffer, long leng)
+int kread(long handle, void *buffer, long leng)
 {
 	long i, j, filenum, groupnum;
 
@@ -382,7 +383,7 @@ kread(long handle, void *buffer, long leng)
 	return(0);
 }
 
-klseek(long handle, long offset, long whence)
+int klseek(long handle, long offset, long whence)
 {
 	long i, groupnum;
 
@@ -404,7 +405,7 @@ klseek(long handle, long offset, long whence)
 	return(-1);
 }
 
-kfilelength(long handle)
+int kfilelength(long handle)
 {
 	long i, groupnum;
 
@@ -414,7 +415,7 @@ kfilelength(long handle)
 	return(gfileoffs[groupnum][i+1]-gfileoffs[groupnum][i]);
 }
 
-kclose(long handle)
+void kclose(long handle)
 {
 	if (handle < 0) return;
 	if (filegrp[handle] == 255) close(filehan[handle]);
@@ -429,7 +430,7 @@ kclose(long handle)
 static char *lzwbuf1, *lzwbuf4, *lzwbuf5, lzwbuflock[5];
 static short *lzwbuf2, *lzwbuf3;
 
-kdfread(void *buffer, size_t dasizeof, size_t count, long fil)
+void kdfread(void *buffer, size_t dasizeof, size_t count, long fil)
 {
 	long i, j, k, kgoal;
 	short leng;
@@ -465,7 +466,7 @@ kdfread(void *buffer, size_t dasizeof, size_t count, long fil)
 	lzwbuflock[0] = lzwbuflock[1] = lzwbuflock[2] = lzwbuflock[3] = lzwbuflock[4] = 1;
 }
 
-dfread(void *buffer, size_t dasizeof, size_t count, FILE *fil)
+void dfread(void *buffer, size_t dasizeof, size_t count, FILE *fil)
 {
 	long i, j, k, kgoal;
 	short leng;
@@ -501,7 +502,7 @@ dfread(void *buffer, size_t dasizeof, size_t count, FILE *fil)
 	lzwbuflock[0] = lzwbuflock[1] = lzwbuflock[2] = lzwbuflock[3] = lzwbuflock[4] = 1;
 }
 
-dfwrite(void *buffer, size_t dasizeof, size_t count, FILE *fil)
+void dfwrite(void *buffer, size_t dasizeof, size_t count, FILE *fil)
 {
 	long i, j, k;
 	short leng;
@@ -545,7 +546,7 @@ dfwrite(void *buffer, size_t dasizeof, size_t count, FILE *fil)
 	lzwbuflock[0] = lzwbuflock[1] = lzwbuflock[2] = lzwbuflock[3] = lzwbuflock[4] = 1;
 }
 
-compress(char *lzwinbuf, long uncompleng, char *lzwoutbuf)
+int compress(char *lzwinbuf, long uncompleng, char *lzwoutbuf)
 {
 	long i, addr, newaddr, addrcnt, zx, *longptr;
 	long bytecnt1, bitcnt, numbits, oneupnumbits;
@@ -607,7 +608,7 @@ compress(char *lzwinbuf, long uncompleng, char *lzwoutbuf)
 	return(uncompleng+4);
 }
 
-uncompress(char *lzwinbuf, long compleng, char *lzwoutbuf)
+int uncompress(char *lzwinbuf, long compleng, char *lzwoutbuf)
 {
 	long strtot, currstr, numbits, oneupnumbits;
 	long i, dat, leng, bitcnt, outbytecnt, *longptr;

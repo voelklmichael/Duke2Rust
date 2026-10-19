@@ -59,6 +59,11 @@ int16  IntelShort (int16 l);
 int32  MotoLong (int32 l);
 int32  IntelLong (int32 l);
 
+// PORT: also in MACT386.LIB (mathutil.c, zone.c) but not declared in its headers.
+int32  FindDistance2D(int32 dx, int32 dy);
+int32  FindDistance3D(int32 dx, int32 dy, int32 dz);
+int32  Z_AvailHeap(void);
+
 void HeapSort(char * base, int32 nel, int32 width, int32 (*compare)(), void (*switcher)());
 
 #ifdef __cplusplus

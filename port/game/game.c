@@ -110,7 +110,7 @@ void timerhandler()
 
 void inittimer()
 {
-    TimerPtr = TS_ScheduleTask( timerhandler,TICRATE, 1, NULL );
+    TimerPtr = TS_ScheduleTask( (void (*)(task *))timerhandler,TICRATE, 1, NULL );  // PORT: cast (handler ignores its task argument)
     TS_Dispatch();
 }
 
@@ -346,7 +346,7 @@ short user_quote_time[MAXUSERQUOTES];
 char user_quote[MAXUSERQUOTES][128];
 // char typebuflen,typebuf[41];
 
-adduserquote(char *daquote)
+void adduserquote(char *daquote)
 {
     long i;
 
@@ -2610,7 +2610,7 @@ long tempsectorz[MAXSECTORS];
 long tempsectorpicnum[MAXSECTORS];
 //short tempcursectnum;
 
-SE40_Draw(int spnum,long x,long y,long z,short a,short h,long smoothratio)
+void SE40_Draw(int spnum,long x,long y,long z,short a,short h,long smoothratio)  // PORT: was implicit int (returns no value)
 {
  int i=0,j=0,k=0;
  int floor1=0,floor2=0,ok=0,fofmode=0;

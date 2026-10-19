@@ -541,3 +541,12 @@ extern long stereomode, stereowidth, stereopixelwidth;
 
 extern long myaimmode, myaimstat, omyaimstat;
 
+// PORT: game functions that were used without a declaration (missing from funct.h).
+void clearsoundlocks(void);
+int gametextpal(int x,int y,char *t,char s,char p);
+void resetmys(void);
+void lotsofpaper(spritetype *s, short n);
+void lotsofmail(spritetype *s, short n);
+void docacheit(void);
+void computergetinput(long snum, input *syn);
+void clearfifo(void);
